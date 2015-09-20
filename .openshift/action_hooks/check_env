@@ -1,0 +1,11 @@
+if [ ! -d $OPENSHIFT_DATA_DIR/jdk1.8.0_60 ]
+then
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.tar.gz -O ${OPENSHIFT_DATA_DIR}/jdk-8u60-linux-x64.tar.gz
+    (cd $OPENSHIFT_DATA_DIR && tar -zxf jdk-8u60-linux-x64.tar.gz)
+fi
+
+if [ "$JAVA_HOME" != "$OPENSHIFT_DATA_DIR/jdk/jdk1.8.0_60" ]
+then
+    export PATH=$OPENSHIFT_DATA_DIR/jdk1.8.0_60/bin:$PATH
+    export JAVA_HOME="$OPENSHIFT_DATA_DIR/jdk/jdk1.8.0_60"
+fi
