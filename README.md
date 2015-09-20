@@ -9,6 +9,8 @@ This is a online notepad webapp, written just for practice. It uses
 
 There's no JavaScript at all, since that would take too much time to write.
 
+The webapp is live on Heroku [here](http://boiling-fjord-7572.herokuapp.com/).
+
 TODO:
 * Add unit tests
 * Logins, just for fun
