@@ -1,0 +1,8 @@
+@(note: Note)
+
+@main("View Note", "/" + note.id) {
+  <form class="pure-form">
+    <textarea class="pure-input-1 upload-text" readonly>@note.contents</textarea>
+    <a href="/@note.id/edit" class="pure-button pure-button-primary pure-input-1 upload-btn">Edit</a>
+  </form>
+}

@@ -1,0 +1,14 @@
+@(current: String)
+
+@menuLink(link: String, title: String) = {
+  <li class="pure-menu-item @if(current equals link){ pure-menu-selected }">
+    <a @if(!(current equals link)){ href="@link" } class="pure-menu-link">@title</a>
+  </li>
+}
+
+<div class="pure-menu pure-menu-horizontal navbar">
+  <span href="#" class="pure-menu-heading">NoteIt</span>
+  <ul class="pure-menu-list">
+    @menuLink("/", "Upload")
+  </ul>
+</div>

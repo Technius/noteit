@@ -1,0 +1,5 @@
+@(id: String, noteForm: Form[String])(implicit messages: Messages)
+
+@main("Edit Note", "/" + id + "/edit") {
+  @uploadForm("/" + id + "/edit", "Save Changes", false, noteForm)
+}

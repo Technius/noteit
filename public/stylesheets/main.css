@@ -1,0 +1,20 @@
+.main-content {
+    position: relative;
+    bottom: 0;
+    top: 0;
+}
+
+.upload-text {
+    resize: none;
+    overflow: auto;
+    min-height: calc(100vh - 9.25em);
+}
+
+.upload-btn {
+    margin-top: 0.5em;
+}
+
+.upload-error {
+    padding-top: 0.25em;
+    min-height: 1.25em;
+}
