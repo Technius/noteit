@@ -1,5 +1,0 @@
-. ${OPENSHIFT_REPO_DIR}.openshift/action_hooks/check_env
-
-cd $OPENSHIFT_REPO_DIR
-rm -f target/universal/stage/RUNNING_PID
-nohup target/universal/stage/bin/noteit -Duser.home=${OPENSHIFT_DATA_DIR} -Dhttp.port=${OPENSHIFT_DIY_PORT} -Dhttp.address=${OPENSHIFT_DIY_IP} -DapplyEvolutions.default=true -Dconfig.resource=openshift.conf -mem 512 > $OPENSHIFT_LOG_DIR/play.log 2>&1 &
