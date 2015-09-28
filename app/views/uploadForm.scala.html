@@ -5,7 +5,7 @@
     <textarea class="pure-input-1 upload-text" name="@f.name" id="@f.id" autocomplete="off" autofocus="on" required @if(readonly){ readonly }>@f.value</textarea>
     <div class="pure-input-1 upload-error">
       @if(f.hasErrors) {
-        @f.error.map(_.message)
+        @f.errors.map(e => messages(e.message, e.args: _*)).mkString(", ")
       }
     </div>
   }
