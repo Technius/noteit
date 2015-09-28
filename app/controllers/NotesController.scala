@@ -16,7 +16,7 @@ class NotesController @Inject()(notes: NotesDao, val messagesApi: MessagesApi)
     extends Controller with I18nSupport {
 
   val uploadForm = Form(
-    single("contents" -> nonEmptyText)
+    single("contents" -> nonEmptyText(maxLength = 9999))
   )
 
   /**
