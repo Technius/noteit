@@ -1,38 +1,43 @@
 package dao
 
 import javax.inject.{ Inject, Singleton }
-import play.api.db.slick.{ DatabaseConfigProvider, HasDatabaseConfigProvider }
-import slick.driver.JdbcProfile
+import io.getquill._
+import io.getquill.naming.SnakeCase
+import io.getquill.sources.sql.idiom.PostgresDialect
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import models.Note
 
-trait NotesComponent { self: HasDatabaseConfigProvider[JdbcProfile] =>
-  import driver.api._
-
-  class Notes(tag: Tag) extends Table[Note](tag, "notes") {
-    def id = column[String]("id", O.PrimaryKey)
-    def contents = column[String]("contents")
-    def * = (id, contents) <> (Note.tupled, Note.unapply _)
-  }
-}
-
 @Singleton
-class NotesDao @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-    extends NotesComponent with HasDatabaseConfigProvider[JdbcProfile] {
-  import driver.api._
+class NotesDao {
+  lazy val db = source(new PostgresAsyncSourceConfig[SnakeCase]("db.default"))
 
-  val notes = TableQuery[Notes]
+  private val notes = quote {
+    query[Note](_.entity("notes"))
+  }
 
-  def insert(note: Note): Future[Unit] = db.run(notes += note).map(_ => ())
+  private val byId = quote { (id: String) =>
+    notes.filter(_.id == id)
+  }
 
-  def delete(id: String): Future[Int] =
-    db.run(notes.filter(_.id === id).delete)
+  def insert(note: Note): Future[Long] = db.run(notes.insert)(note)
 
-  def find(id: String): Future[Option[Note]] =
-    db.run(notes.filter(_.id === id).take(1).result).map(_.headOption)
+  def delete(id: String): Future[Long] = db.run {
+    quote { (id: String) =>
+      byId(id).delete
+    }
+  }(id)
 
-  def update(id: String, contents: String): Future[Int] =
-    db.run(notes.filter(_.id === id).map(_.contents).update(contents))
+  def find(id: String): Future[Option[Note]] = db.run {
+    quote { (id: String) =>
+      byId(id).take(1)
+    }
+  }(id).map(_.headOption)
+
+  def update(id: String, contents: String): Future[Long] = db.run {
+    quote { (id: String, contents: String) =>
+      byId(id).update(_.contents -> contents)
+    }
+  }(id, contents)
 }
