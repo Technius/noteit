@@ -12,8 +12,8 @@ libraryDependencies ++= Seq(
   ws,
   evolutions,
   "org.postgresql" % "postgresql" % "9.4-1203-jdbc42",
-  "io.getquill" %% "quill-jdbc" % "0.5.0",
-  "io.getquill" %% "quill-async" % "0.5.0",
+  "io.getquill" %% "quill-jdbc" % "0.6.0",
+  "io.getquill" %% "quill-async" % "0.6.0",
   "org.webjars" % "pure" % "0.6.0"
 )
 

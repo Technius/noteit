@@ -14,7 +14,7 @@ class NotesDao {
   lazy val db = source(new PostgresAsyncSourceConfig[SnakeCase]("db.default"))
 
   private val notes = quote {
-    query[Note](_.entity("notes"))
+    query[Note].schema(_.entity("notes"))
   }
 
   private val byId = quote { (id: String) =>
@@ -24,20 +24,18 @@ class NotesDao {
   def insert(note: Note): Future[Long] = db.run(notes.insert)(note)
 
   def delete(id: String): Future[Long] = db.run {
-    quote { (id: String) =>
-      byId(id).delete
-    }
-  }(id)
+    quote(byId(lift(id)).delete)
+  }
 
   def find(id: String): Future[Option[Note]] = db.run {
-    quote { (id: String) =>
-      byId(id).take(1)
+    quote {
+      byId(lift(id)).take(1)
     }
-  }(id).map(_.headOption)
+  }.map(_.headOption)
 
   def update(id: String, contents: String): Future[Long] = db.run {
-    quote { (id: String, contents: String) =>
-      byId(id).update(_.contents -> contents)
+    quote {
+      byId(lift(id)).update(_.contents -> lift(contents))
     }
-  }(id, contents)
+  }
 }
